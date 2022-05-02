@@ -1,6 +1,6 @@
-# About {{ Name }}
+# About assets-github-actions-dotnet-nugetpush
 
-ERNI Academy StarterKit, PoC, or Gidelines. This is an about description of your repository.
+Is a github composite action to push nugets for dotnet projects
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -9,44 +9,56 @@ ERNI Academy StarterKit, PoC, or Gidelines. This is an about description of your
 
 This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-- [Tools A](https://example.com)
-- [Framework B](https://example.com)
-- [Project C](https://example.com)
+- [Composite action](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action)
 
 ## Features
 
-- Be awesome
-- Make things faster
+- push nugets for dotnet projects
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally. To get a local copy up and running follow these simple example steps.
+Check the releases of https://github.com/ERNI-Academy/assets-github-actions-dotnet-nugetpush/releases
+Find the lastest tag or one of the previus versions e.g. "v1"
+Then your able to use it in your workflows
+
+Please take a look at https://docs.github.com/en/actions/creating-actions/creating-a-composite-action to see how composite actions works.
 
 ## Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+You would need to have a Package Token for github with **write:packages** and **read:packages** scopes.
+Follow this link https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token to see how to create a PAT.
+
+Remember that Package Token is sensitive and should be keeped as a secret. 
 
 ## Installation
 
-Installation instructions {{ Name }} by running:
+In the workflow of your target dotnet repository do this:
 
-1. Clone the repo
+1. Your workflow:
 
-   ```sh
-   git clone https://github.com/ERNI-Academy/Project-Name.git
-   ```
+```yml
+name: NuGet
 
-2. Install packages
+on:
+  push:
+    branches:
+      - main
 
-    ```sh
-    npm install
-    ```
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-3. Configure
+ #maybe other steps of your desire
 
-    ```JS
-    const API_KEY = 'ENTER YOUR API';
-    ```
+     # insert this in order to have nuget push:
+     - id: nuget-push
+       uses: ERNI-Academy/assets-github-actions-dotnet-nugetpush@v1  # this is name of the action plus the version "v1" find the lastest tag in the releases
+       with:
+         pakages_token: '[your package token]'         # your package token, we recommend that to storage the token in a secret and use it like ${{ secrets.PACKAGE_TOKEN }}         
+```
 
 ## Contributing
 
@@ -56,7 +68,7 @@ Please see our [Contribution Guide](CONTRIBUTING.md) to learn how to contribute.
 
 ![MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
-(LICENSE) © {{Year}} [ERNI - Swiss Software Engineering](https://www.betterask.erni)
+(LICENSE) © 2022 [ERNI - Swiss Software Engineering](https://www.betterask.erni)
 
 ## Code of conduct
 

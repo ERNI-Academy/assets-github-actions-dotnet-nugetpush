@@ -1,0 +1,16 @@
+name: NuGet
+description: NuGet push
+inputs:
+  pakages_token:
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Pack
+      run: dotnet pack --configuration Release -o nuget
+      shell: bash
+    - name: Push
+      run: dotnet nuget push "nuget/*.nupkg" --source "https://nuget.pkg.github.com/ERNI-Academy/index.json" --api-key ${{ inputs.pakages_token }} --skip-duplicate
+      shell: bash
